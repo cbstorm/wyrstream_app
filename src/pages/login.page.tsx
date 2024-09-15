@@ -68,7 +68,6 @@ export function RightSide() {
         _id: res?._id,
         email: res?.email,
         name: res?.name,
-        isNoCompany: res?.isNoCompany,
         createdAt: res?.createdAt,
         updatedAt: res?.updatedAt,
       });

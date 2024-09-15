@@ -5,7 +5,6 @@ const userStateDefault: IUser = {
   _id: '',
   name: '',
   email: '',
-  isNoCompany: true,
   createdAt: null!,
   updatedAt: null!,
 };
