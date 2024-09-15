@@ -1,13 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.mdxeditor-popup-container {
+  border: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f1f5f9;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+input {
+  outline: none;
+}
+
+.main-page::-webkit-scrollbar {
+  width: 6px;
+  /* width of the entire scrollbar */
+}
+
+.main-page::-webkit-scrollbar-track {
+  background: transparent;
+  /* color of the tracking area */
+}
+
+.main-page::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 20px;
+}
+
+.nav-bar::-webkit-scrollbar {
+  width: 6px;
+  /* width of the entire scrollbar */
+}
+
+.nav-bar::-webkit-scrollbar-track {
+  background: transparent;
+  /* color of the tracking area */
+}
+
+.nav-bar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 20px;
+}
+
+* {
+  outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade_in .2s ease-in-out forwards;
+}
+
+.top-100 {
+  top: 100%
+}
+
+.bottom-100 {
+  bottom: 100%
+}
+
+.max-h-select {
+  max-height: 300px;
+}
+
+.multi-select::-webkit-scrollbar {
+  height: 3px;
+  /* width of the entire scrollbar */
+}
+
+.multi-select::-webkit-scrollbar-track {
+  background: transparent;
+  /* color of the tracking area */
+}
+
+.multi-select::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 2px;
+}
+
+._listitem_1tncs_69 {
+  list-style-type: disc;
+}
+
+.item-in-list {
+  animation: moveBottomUp .5s ease-in-out;
+}
+
+@keyframes moveBottomUp {
+  0% {
+      opacity: 0;
+      transform: translateY(10%);
+  }
+
+  100% {
+      opacity: 100;
+      transform: translateY(0);
+  }
 }
