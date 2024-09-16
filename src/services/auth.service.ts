@@ -16,7 +16,7 @@ class AuthService extends BaseService {
 
   async getMe() {
     const inp = new APIBuilder();
-    inp.setPath('/auth/me');
+    inp.setPath('/auth/user/get_me');
     return await this.Get<IUser>(inp);
   }
 }

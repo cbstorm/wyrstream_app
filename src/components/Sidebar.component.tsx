@@ -1,9 +1,7 @@
 /* eslint-disable eqeqeq */
 import { useLocation, useNavigate } from 'react-router-dom';
-import CompanyIcon from '../icons/Company.icon';
 import DashboardIcon from '../icons/Dashboard.icon';
-import JobIcon from '../icons/Job.icon';
-import UserIcon from '../icons/User.icon';
+import PlayCircleIcon from '../icons/PlayCircle.icon';
 import { Logo } from './Logo.component';
 
 export default function Sidebar(props: { className: string; isLoading: boolean }) {
@@ -26,9 +24,7 @@ function SidebarNav() {
   return (
     <nav className='flex flex-col gap-2'>
       <SidebarItem icon={<DashboardIcon />} title='Dashboard' path='/' />
-      <SidebarItem icon={<JobIcon />} title='Jobs' path='/job_postings' />
-      <SidebarItem icon={<UserIcon />} title='Candidates' path='/candidates' />
-      <SidebarItem icon={<CompanyIcon />} title='Companies' path='/companies' />
+      <SidebarItem icon={<PlayCircleIcon />} title='Streams' path='/streams' />
     </nav>
   );
 }

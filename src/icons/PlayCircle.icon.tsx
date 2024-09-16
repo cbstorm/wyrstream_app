@@ -1,6 +1,6 @@
 import { IIconProps } from './common';
 
-export default function PlayIcon(props: IIconProps) {
+export default function PlayCircleIcon(props: IIconProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -10,10 +10,11 @@ export default function PlayIcon(props: IIconProps) {
       stroke='currentColor'
       className={props.className || 'w-6 h-6'}
     >
+      <path strokeLinecap='round' strokeLinejoin='round' d='M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' />
       <path
         strokeLinecap='round'
         strokeLinejoin='round'
-        d='M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z'
+        d='M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z'
       />
     </svg>
   );
