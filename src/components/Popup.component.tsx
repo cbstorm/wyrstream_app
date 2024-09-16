@@ -58,7 +58,7 @@ export function PopupSubmitActionButton(props: { onSubmit: () => void; disabled?
       <button
         disabled={props.disabled}
         onClick={() => props.onSubmit()}
-        className='flex gap-1 items-center bg-amber-500 border border-amber-500 rounded-lg px-3 py-2 text-white text-sm font-semibold hover:bg-amber-600 transition-all duration-100 '
+        className='flex gap-1 items-center bg-amber-500 border border-amber-500 rounded-lg px-3 py-2 text-white text-sm font-semibold hover:bg-amber-600 transition-all duration-100 disabled:opacity-60'
       >
         <span className='p-1 bg-amber-200 bg-opacity-50 rounded-full'>
           <CheckIcon className='w-4 h-4' />

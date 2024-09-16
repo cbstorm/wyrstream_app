@@ -4,8 +4,6 @@ import { BASE_URL } from '../configs/config';
 
 export const MAX_ATTEMPT = 3;
 
-// localStorage.setItem('access_token', refreshRes.newToken);
-//       localStorage.setItem('refresh_token', refreshRes.newRefreshToken);
 export function getAccessToken(): string {
   return localStorage.getItem('access_token')!;
 }
@@ -67,13 +65,13 @@ async function callAPI<I, O>(
   } catch (error: any) {
     console.log({ error });
     if ((error as any)?.response?.data?.name === 'UNAUTHORIZED' && attempt < MAX_ATTEMPT) {
-      const refreshRes: { newToken: string; newRefreshToken: string } = await axiosInstance({
-        url: '/auth/refresh_token',
+      const refreshRes: { new_token: string; new_refresh_token: string } = await axiosInstance({
+        url: '/auth/user/refresh_token',
         method: 'POST',
-        data: { refreshToken: getRefreshToken(), token: getAccessToken() },
+        data: { refresh_token: getRefreshToken(), access_token: getAccessToken() },
       }).then((res) => res.data);
-      setAccessToken(refreshRes.newToken);
-      setRefreshToken(refreshRes.newRefreshToken);
+      setAccessToken(refreshRes.new_token);
+      setRefreshToken(refreshRes.new_refresh_token);
       return await callAPI(inp, attempt + 1);
     } else {
       throw new Error((error as any)?.response?.data?.message);

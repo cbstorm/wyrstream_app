@@ -49,7 +49,7 @@ function MainComponent() {
         <div className='w-1/6 z-0 opacity-0'></div>
         <div className='pt-24 px-8 w-5/6'>
           <Routes>
-            <Route path='/places' element={<StreamPage />} />
+            <Route path='/streams' element={<StreamPage />} />
           </Routes>
         </div>
       </div>

@@ -8,7 +8,7 @@ export default function CompanyIcon(props: IIconProps) {
       viewBox='0 0 24 24'
       strokeWidth='2'
       stroke='currentColor'
-      className={props.className || 'w-5 h-5'}
+      className={props.className || 'w-6 h-6'}
     >
       <path
         strokeLinecap='round'
