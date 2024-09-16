@@ -81,7 +81,7 @@ export function RightSide() {
     setIsPending(true);
     try {
       const apiBuilder = new APIBuilder<ICreateAccountInput>().setBody(createAccountInput);
-      await authService.createAccount(apiBuilder);
+      await authService.CreateAccount(apiBuilder);
       navigate('/login');
     } catch (error) {
       setException(_.get(error, 'message', 'Error occurred'));

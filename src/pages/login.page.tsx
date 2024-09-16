@@ -61,7 +61,7 @@ export function RightSide() {
     setIsLoggedIn(true);
     try {
       const apiBuilder = new APIBuilder<ILoginInput>().setBody(loginInput);
-      const res = await authService.login(apiBuilder);
+      const res = await authService.Login(apiBuilder);
       setAccessToken(res.access_token);
       setRefreshToken(res.refresh_token);
       setUser({

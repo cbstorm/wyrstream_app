@@ -1,0 +1,28 @@
+/* eslint-disable import/no-anonymous-default-export */
+import { Fetch{{Case name}}sResponse, ICreate{{Case name}}Input, I{{Case name}}, IUpdate{{Case name}}Input } from '../entities/{{name}}.entity';
+import { APIBuilder, BaseService } from './base.service';
+
+class {{Case name}}Service extends BaseService {
+  async Fetch{{Case name}}s(inp: APIBuilder) {
+    inp.setPath('/{{Plural name}}');
+    return await this.Fetch<Fetch{{Case name}}sResponse>(inp);
+  }
+  async GetOne{{Case name}}(inp: APIBuilder) {
+    inp.setPath('/{{Plural name}}');
+    return await this.Get<I{{Case name}}>(inp);
+  }
+  async Create{{Case name}}(inp: APIBuilder<ICreate{{Case name}}Input>) {
+    inp.setPath('/{{Plural name}}');
+    return this.Post<ICreate{{Case name}}Input, I{{Case name}}>(inp);
+  }
+  async UpdateOne{{Case name}}(inp: APIBuilder<IUpdate{{Case name}}Input>) {
+    inp.setPath('/{{Plural name}}');
+    return await this.Put<IUpdate{{Case name}}Input, I{{Case name}}>(inp);
+  }
+  async deleteOne{{Case name}}(inp: APIBuilder) {
+    inp.setPath('/{{Plural name}}');
+    return await this.Delete<I{{Case name}}>(inp);
+  }
+}
+
+export default new {{Case name}}Service();

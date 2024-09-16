@@ -24,7 +24,7 @@ function MainComponent() {
     if (user._id) return;
     setIsLoading(true);
     try {
-      const res = await authService.getMe();
+      const res = await authService.GetMe();
       setUser({
         _id: res?._id,
         email: res?.email,

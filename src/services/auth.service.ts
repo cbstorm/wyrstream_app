@@ -4,17 +4,17 @@ import { IUser } from '../entities/user.enity';
 import { APIBuilder, BaseService } from './base.service';
 
 class AuthService extends BaseService {
-  async login(inp: APIBuilder<ILoginInput>) {
+  async Login(inp: APIBuilder<ILoginInput>) {
     inp.setPath('/auth/user/login');
     return await this.Post<ILoginInput, ILoginReponse>(inp);
   }
 
-  async createAccount(inp: APIBuilder<ICreateAccountInput>) {
+  async CreateAccount(inp: APIBuilder<ICreateAccountInput>) {
     inp.setPath('/auth/user/create_account');
     return await this.Post<ICreateAccountInput, ICreateAccountResponse>(inp);
   }
 
-  async getMe() {
+  async GetMe() {
     const inp = new APIBuilder();
     inp.setPath('/auth/user/get_me');
     return await this.Get<IUser>(inp);

@@ -2,15 +2,23 @@ import _ from 'lodash';
 import { useState } from 'react';
 import { Input } from '../components/Input.component';
 import { Popup, PopupCloseActionButton, PopupException, PopupSubmitActionButton } from '../components/Popup.component';
-import { ICreateStreamInput } from '../entities/stream.entity';
+import { ICreateStreamInput, IStream } from '../entities/stream.entity';
+import { APIBuilder } from '../services/base.service';
+import streamService from '../services/stream.service';
+import { Validator } from '../utils/validator';
 
 export default function StreamPage() {
   const [createStreamPopupVisible, setCreateNewStreamPopupVisible] = useState(false);
+  const [streams, setStreams] = useState<IStream[]>([]);
+  const handleNew = (s: IStream) => {
+    setStreams((prev) => [s, ...prev]);
+    setCreateNewStreamPopupVisible(false);
+  };
   return (
     <div>
       <CreateNewStreamButton onClick={() => setCreateNewStreamPopupVisible(true)} />
       {createStreamPopupVisible && (
-        <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={() => {}} />
+        <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={handleNew} />
       )}
     </div>
   );
@@ -29,18 +37,26 @@ function CreateNewStreamButton(props: { onClick: () => void }) {
   );
 }
 
-function CreateNewStreamPopup(props: { onClose: () => void; onNew: () => void }) {
+function CreateNewStreamPopup(props: { onClose: () => void; onNew: (stream: IStream) => void }) {
   const [exception, setException] = useState<string>('');
   const [submitting, setIsSubmitting] = useState(false);
   const [createStreamInput, setCreateStreamInput] = useState<ICreateStreamInput>({} as ICreateStreamInput);
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
+
     try {
-      setIsSubmitting(false);
+      const err = new Validator(createStreamInput).require('title').require('description').getFirstError();
+      if (err) {
+        throw err;
+      }
+      const apiBuilder = new APIBuilder<ICreateStreamInput>().setBody(createStreamInput);
+      const stream = await streamService.CreateStream(apiBuilder);
+      props.onNew(stream);
     } catch (error) {
       setException(_.get(error, 'message', 'Error occurred'));
       console.log('handleSubmit: ', error);
     }
+    setIsSubmitting(false);
   };
   const handleTitleChange = (title: string) => {
     setCreateStreamInput((prev) => ({ ...prev, title: title }));
