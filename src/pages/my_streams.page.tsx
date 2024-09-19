@@ -15,16 +15,21 @@ export default function MyStreamsPage() {
   const [createStreamPopupVisible, setCreateNewStreamPopupVisible] = useState(false);
   const [guidanceCommandPopupVisible, setGuidanceCommandPopupVisible] = useState(false);
   const [streams, setStreams] = useState<IStream[]>([]);
+  const [selectedStream, setSelectedStream] = useState<IStream>({} as IStream);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const handleNew = (s: IStream) => {
-    setStreams((prev) => [s, ...prev]);
+  const handleNew = (stream: IStream) => {
+    setStreams((prev) => [stream, ...prev]);
     setCreateNewStreamPopupVisible(false);
+    setSelectedStream(stream);
     setGuidanceCommandPopupVisible(true);
   };
   const handleItemClick = (stream: IStream) => {
-    console.log(stream._id);
+    if (!stream.is_publishing) {
+      setSelectedStream(stream);
+      setGuidanceCommandPopupVisible(true);
+    }
   };
   const fetchMyStreams = async () => {
     setIsLoading(true);
@@ -46,13 +51,13 @@ export default function MyStreamsPage() {
   return (
     <div className='flex flex-col gap-4'>
       <CreateNewStreamButton onClick={() => setCreateNewStreamPopupVisible(true)} />
-      <MyStreamList streams={streams} onItemClick={handleItemClick} />
+      <MyStreamList isLoading={isLoading} streams={streams} onItemClick={handleItemClick} />
       {createStreamPopupVisible && (
         <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={handleNew} />
       )}
       {guidanceCommandPopupVisible && (
         <GuidancePopup
-          guidancePublishCommand={streams[0].guidance_command}
+          guidancePublishCommand={selectedStream.guidance_command}
           onClose={() => setGuidanceCommandPopupVisible(false)}
         />
       )}

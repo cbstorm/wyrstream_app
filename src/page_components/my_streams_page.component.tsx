@@ -112,9 +112,22 @@ export function GuidancePopup(props: { onClose: () => void; guidancePublishComma
   );
 }
 
-export function MyStreamList(props: { streams: IStream[]; onItemClick: (stream: IStream) => void }) {
+export function MyStreamList(props: {
+  isLoading: boolean;
+  streams: IStream[];
+  onItemClick: (stream: IStream) => void;
+}) {
   return (
     <div className='grid grid-cols-4 gap-2'>
+      {props.isLoading &&
+        _.times(4, (i) => {
+          return <MyStreamItemSkeleton key={i} />;
+        })}
+      {!props.streams.length && (
+        <div className='flex justify-center col-span-full'>
+          <span className='text-gray-600 font-medium'>You do not have any stream</span>
+        </div>
+      )}
       {props.streams.map((e, idx) => {
         return <MyStreamItem key={idx} stream={e} onClick={() => props.onItemClick(e)} />;
       })}
@@ -126,9 +139,9 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
   return (
     <div
       onClick={() => props.onClick()}
-      className='shadow-lg overflow-hidden rounded-lg flex flex-col gap-2 bg-slate-50 cursor-pointer hover:shadow-xl transition-all duration-100'
+      className='fade-in shadow-lg overflow-hidden rounded-lg flex flex-col gap-2 bg-slate-50 cursor-pointer hover:shadow-xl transition-all duration-100'
     >
-      <VideoPlaceholder className='w-full h-32 object-cover shadow-sm rounded-b-lg' />
+      <VideoPlaceholder className='w-full h-36 object-cover shadow-sm rounded-b-lg' />
       <div className='px-2 flex justify-between flex-col h-full'>
         <div className='h-full'>
           <h2 className='font-semibold text-gray-800'>{props.stream.title}</h2>
@@ -141,4 +154,8 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
       </div>
     </div>
   );
+}
+
+function MyStreamItemSkeleton() {
+  return <div className='h-60 rounded-lg bg-slate-300 animate-pulse'></div>;
 }
