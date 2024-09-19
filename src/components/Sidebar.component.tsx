@@ -24,7 +24,7 @@ function SidebarNav() {
   return (
     <nav className='flex flex-col gap-2'>
       <SidebarItem icon={<DashboardIcon />} title='Dashboard' path='/' />
-      <SidebarItem icon={<PlayCircleIcon />} title='Streams' path='/streams' />
+      <SidebarItem icon={<PlayCircleIcon />} title='My Streams' path='/my_streams' />
     </nav>
   );
 }

@@ -7,6 +7,10 @@ class StreamService extends BaseService {
     inp.setPath('/streams');
     return await this.Fetch<FetchStreamsResponse>(inp);
   }
+  async FetchMyStreams(inp: APIBuilder) {
+    inp.setPath('/streams/my_streams');
+    return await this.Fetch<FetchStreamsResponse>(inp);
+  }
   async GetOneStream(inp: APIBuilder) {
     inp.setPath('/streams');
     return await this.Get<IStream>(inp);

@@ -1,30 +1,16 @@
 import _ from 'lodash';
 import { useState } from 'react';
+import { VideoPlaceholder } from '../assets/video_placeholder';
 import { Input } from '../components/Input.component';
 import { Popup, PopupCloseActionButton, PopupException, PopupSubmitActionButton } from '../components/Popup.component';
 import { ICreateStreamInput, IStream } from '../entities/stream.entity';
+import SignalIcon from '../icons/Signal.icon';
+import SignalSlashIcon from '../icons/SignalSlash.icon';
 import { APIBuilder } from '../services/base.service';
 import streamService from '../services/stream.service';
 import { Validator } from '../utils/validator';
 
-export default function StreamPage() {
-  const [createStreamPopupVisible, setCreateNewStreamPopupVisible] = useState(false);
-  const [streams, setStreams] = useState<IStream[]>([]);
-  const handleNew = (s: IStream) => {
-    setStreams((prev) => [s, ...prev]);
-    setCreateNewStreamPopupVisible(false);
-  };
-  return (
-    <div>
-      <CreateNewStreamButton onClick={() => setCreateNewStreamPopupVisible(true)} />
-      {createStreamPopupVisible && (
-        <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={handleNew} />
-      )}
-    </div>
-  );
-}
-
-function CreateNewStreamButton(props: { onClick: () => void }) {
+export function CreateNewStreamButton(props: { onClick: () => void }) {
   return (
     <div className='flex justify-end'>
       <button
@@ -37,7 +23,7 @@ function CreateNewStreamButton(props: { onClick: () => void }) {
   );
 }
 
-function CreateNewStreamPopup(props: { onClose: () => void; onNew: (stream: IStream) => void }) {
+export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (stream: IStream) => void }) {
   const [exception, setException] = useState<string>('');
   const [submitting, setIsSubmitting] = useState(false);
   const [createStreamInput, setCreateStreamInput] = useState<ICreateStreamInput>({} as ICreateStreamInput);
@@ -86,7 +72,7 @@ function CreateNewStreamPopup(props: { onClose: () => void; onNew: (stream: IStr
       ]}
       title='New stream'
     >
-      <div className='w-full h-full overflow-y-auto p-4 pb-20 flex flex-col gap-2'>
+      <div className='overflow-y-auto p-4 pb-20 flex flex-col gap-2'>
         <Input
           name='title'
           placeholder='Enter the title of your stream'
@@ -103,5 +89,56 @@ function CreateNewStreamPopup(props: { onClose: () => void; onNew: (stream: IStr
         />
       </div>
     </Popup>
+  );
+}
+
+export function GuidancePopup(props: { onClose: () => void; guidancePublishCommand: string }) {
+  return (
+    <Popup
+      title='Guidance'
+      className='flex flex-col gap-1 w-[50%] h-auto'
+      action={[
+        <div key={0} className='flex w-full gap-1 justify-between'>
+          <div className='flex gap-1 w-full justify-end'>
+            <PopupCloseActionButton onClose={() => props.onClose()} />
+          </div>
+        </div>,
+      ]}
+    >
+      <div className='w-full h-full overflow-y-auto p-4 pb-20 flex flex-col gap-2'>
+        <Input name='guidance' onChange={() => {}} value={props.guidancePublishCommand} placeholder='' disabled />
+      </div>
+    </Popup>
+  );
+}
+
+export function MyStreamList(props: { streams: IStream[]; onItemClick: (stream: IStream) => void }) {
+  return (
+    <div className='grid grid-cols-4 gap-2'>
+      {props.streams.map((e, idx) => {
+        return <MyStreamItem key={idx} stream={e} onClick={() => props.onItemClick(e)} />;
+      })}
+    </div>
+  );
+}
+
+export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
+  return (
+    <div
+      onClick={() => props.onClick()}
+      className='shadow-lg overflow-hidden rounded-lg flex flex-col gap-2 bg-slate-50 cursor-pointer hover:shadow-xl transition-all duration-100'
+    >
+      <VideoPlaceholder className='w-full h-32 object-cover shadow-sm rounded-b-lg' />
+      <div className='px-2 flex justify-between flex-col h-full'>
+        <div className='h-full'>
+          <h2 className='font-semibold text-gray-800'>{props.stream.title}</h2>
+          <span className='text-sm text-gray-600'>{props.stream.description}</span>
+        </div>
+        <div className='flex justify-end py-2'>
+          {props.stream.is_publishing && <SignalIcon className='text-emerald-600 w-6 h-6' />}
+          {!props.stream.is_publishing && <SignalSlashIcon className='text-amber-600 w-6 h-6' />}
+        </div>
+      </div>
+    </div>
   );
 }

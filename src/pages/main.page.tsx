@@ -6,7 +6,7 @@ import Header from '../components/Header.component';
 import Sidebar from '../components/Sidebar.component';
 import authService from '../services/auth.service';
 import { UserState } from '../states/user.state';
-import StreamPage from './streams.page';
+import MyStreamsPage from './my_streams.page';
 
 export default function MainPage() {
   return (
@@ -49,7 +49,7 @@ function MainComponent() {
         <div className='w-1/6 z-0 opacity-0'></div>
         <div className='pt-24 px-8 w-5/6'>
           <Routes>
-            <Route path='/streams' element={<StreamPage />} />
+            <Route path='/my_streams' element={<MyStreamsPage />} />
           </Routes>
         </div>
       </div>
