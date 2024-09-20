@@ -40,7 +40,7 @@ export default function MyStreamsPage() {
   const fetchMyStreams = async () => {
     setIsLoading(true);
     try {
-      const apiBuilder = new APIBuilder().setPage(page + 1);
+      const apiBuilder = new APIBuilder().setPage(page + 1).setIncludes('stream_logs');
       const res = await streamService.FetchMyStreams(apiBuilder);
       setStreams((prev) => [...prev, ...res.result]);
       setPage(page + 1);
@@ -69,7 +69,7 @@ export default function MyStreamsPage() {
         />
       )}
       {viewStreamPopupVisible && (
-        <MyStreamViewPopup hls_url={selectedStream.hls_url} onClose={() => setViewStreamPopupVisible(false)} />
+        <MyStreamViewPopup stream={selectedStream} onClose={() => setViewStreamPopupVisible(false)} />
       )}
     </div>
   );

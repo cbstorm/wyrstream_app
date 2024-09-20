@@ -16,6 +16,7 @@ export function VideoPlayer(props: {
   controls?: boolean;
   responsive?: boolean;
   fluid?: boolean;
+  className?: string;
 }) {
   const playerRef = useRef(null);
 
@@ -44,10 +45,10 @@ export function VideoPlayer(props: {
     });
   };
 
-  return <Video options={videoJsOptions} onReady={handlePlayerReady} />;
+  return <Video options={videoJsOptions} onReady={handlePlayerReady} className={props.className} />;
 }
 
-export function Video(props: { options: any; onReady: (player: Player) => any }) {
+export function Video(props: { options: any; onReady: (player: Player) => any; className?: string }) {
   const videoRef = useRef(null);
   const playerRef = useRef(null);
   const { options, onReady } = props;
@@ -57,8 +58,11 @@ export function Video(props: { options: any; onReady: (player: Player) => any })
       const videoElement = document.createElement('video-js');
 
       videoElement.classList.add('vjs-big-play-centered');
-      videoElement.classList.add('w-full');
-      videoElement.classList.add('object-cover');
+      if (props.className) {
+        for (const cn of props.className?.split(' ')) {
+          videoElement.classList.add(cn);
+        }
+      }
       (videoRef.current as any).appendChild(videoElement);
 
       const player = ((playerRef as any).current = videojs(videoElement, options, () => {
@@ -85,8 +89,8 @@ export function Video(props: { options: any; onReady: (player: Player) => any })
   }, [playerRef]);
 
   return (
-    <div data-vjs-player className='w-full'>
-      <div className='w-full' ref={videoRef} />
+    <div data-vjs-player className='w-full h-full'>
+      <div className='w-full h-full' ref={videoRef} />
     </div>
   );
 }

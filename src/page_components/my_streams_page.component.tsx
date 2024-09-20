@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import moment from 'moment-timezone';
 import { useState } from 'react';
 import { Input } from '../components/Input.component';
 import { Popup, PopupCloseActionButton, PopupException, PopupSubmitActionButton } from '../components/Popup.component';
 import { VideoPlayer, VideoTypes } from '../components/Video.component';
 import ThumbnailComponent from '../components/VideoThumbnail.component';
 import { ICreateStreamInput, IStream } from '../entities/stream.entity';
+import { IStreamLog } from '../entities/stream_log.entity';
 import SignalIcon from '../icons/Signal.icon';
 import SignalSlashIcon from '../icons/SignalSlash.icon';
 import { APIBuilder } from '../services/base.service';
@@ -32,7 +34,14 @@ export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (strea
     setIsSubmitting(true);
 
     try {
-      const err = new Validator(createStreamInput).require('title').require('description').getFirstError();
+      const err = new Validator(createStreamInput)
+        .require('title')
+        .minLength('title', 6)
+        .maxLength('title', 50)
+        .require('description')
+        .minLength('description', 6)
+        .maxLength('description', 255)
+        .getFirstError();
       if (err) {
         throw err;
       }
@@ -149,7 +158,7 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
           <span className='text-sm text-gray-600'>{props.stream.description}</span>
         </div>
         <div className='flex justify-end py-2'>
-          {props.stream.is_publishing && <SignalIcon className='text-emerald-600 w-6 h-6' />}
+          {props.stream.is_publishing && <SignalIcon className='text-emerald-600 w-6 h-6 blink' />}
           {!props.stream.is_publishing && <SignalSlashIcon className='text-amber-600 w-6 h-6' />}
         </div>
       </div>
@@ -161,10 +170,10 @@ function MyStreamItemSkeleton() {
   return <div className='h-60 rounded-lg bg-slate-300 animate-pulse'></div>;
 }
 
-export function MyStreamViewPopup(props: { hls_url: string; onClose: () => void }) {
+export function MyStreamViewPopup(props: { stream: IStream; onClose: () => void }) {
   return (
     <Popup
-      title='Guidance'
+      title={props.stream.title}
       className='flex flex-col gap-1 w-[80%] h-[80%]'
       action={[
         <div key={0} className='flex w-full gap-1 justify-between'>
@@ -174,9 +183,34 @@ export function MyStreamViewPopup(props: { hls_url: string; onClose: () => void 
         </div>,
       ]}
     >
-      <div className='w-full h-full p-4 pb-20 flex flex-col gap-2'>
-        <VideoPlayer src={props.hls_url} type={VideoTypes.X_MPEGURL} autoplay />
+      <div className='w-full h-full p-4 flex flex-col gap-2'>
+        <VideoPlayer
+          src={props.stream.hls_url}
+          type={VideoTypes.X_MPEGURL}
+          autoplay
+          className='w-full h-full object-cover rounded-lg'
+        />
+        <StreamLogs logs={props.stream.stream_logs} />
       </div>
     </Popup>
+  );
+}
+
+function StreamLogs(props: { logs: IStreamLog[] }) {
+  return (
+    <div className='flex flex-col gap-2 h-[20%] bg-slate-200 p-2 rounded-lg overflow-y-auto'>
+      <h2 className='font-bold text-lg text-gray-800'>Logs:</h2>
+      <div className='flex flex-col overflow-y-auto'>
+        {props.logs.map((e) => {
+          return (
+            <div className='flex gap-1 text-sm'>
+              <span className='font-bold'>{moment(e.createdAt).format('HH:mm:ss DD/MM/YYYY')}</span>
+              <span className='font-bold'>{'>'}</span>
+              <span className=''>{e.log}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

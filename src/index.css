@@ -80,6 +80,20 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+@keyframes blink {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.blink {
+  animation: blink .5s ease-in-out infinite alternate;
+}
+
 @keyframes fade_in {
   from {
     opacity: 0;
@@ -131,12 +145,12 @@ input[type=number]::-webkit-outer-spin-button {
 
 @keyframes moveBottomUp {
   0% {
-      opacity: 0;
-      transform: translateY(10%);
+    opacity: 0;
+    transform: translateY(10%);
   }
 
   100% {
-      opacity: 100;
-      transform: translateY(0);
+    opacity: 100;
+    transform: translateY(0);
   }
 }

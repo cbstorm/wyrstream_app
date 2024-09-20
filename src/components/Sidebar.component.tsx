@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import DashboardIcon from '../icons/Dashboard.icon';
 import PlayCircleIcon from '../icons/PlayCircle.icon';
+import SignalIcon from '../icons/Signal.icon';
 import { Logo } from './Logo.component';
 
 export default function Sidebar(props: { className: string; isLoading: boolean }) {
@@ -24,7 +25,8 @@ function SidebarNav() {
   return (
     <nav className='flex flex-col gap-2'>
       <SidebarItem icon={<DashboardIcon />} title='Dashboard' path='/' />
-      <SidebarItem icon={<PlayCircleIcon />} title='My Streams' path='/my_streams' />
+      <SidebarItem icon={<SignalIcon />} title='My Streams' path='/my_streams' />
+      <SidebarItem icon={<PlayCircleIcon />} title='My Videos' path='/my_videos' />
     </nav>
   );
 }

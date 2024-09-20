@@ -10,7 +10,19 @@ export class Validator<T> {
   }
   require(field: string, errorMessage?: string) {
     if (!_.get(this.data, field)) {
-      _.set(this.errors, field, new Error(errorMessage || `${field} is required.`));
+      _.set(this.errors, field, new Error(errorMessage || `The ${field} is required.`));
+    }
+    return this;
+  }
+  minLength(field: string, len: number, errorMessage?: string) {
+    if (_.get(this.data, field + '.length') < len) {
+      _.set(this.errors, field, new Error(errorMessage || `The ${field} must be at least ${len} characters long.`));
+    }
+    return this;
+  }
+  maxLength(field: string, len: number, errorMessage?: string) {
+    if (_.get(this.data, field + '.length') > len) {
+      _.set(this.errors, field, new Error(errorMessage || `The ${field} must be at most ${len} characters long.`));
     }
     return this;
   }
