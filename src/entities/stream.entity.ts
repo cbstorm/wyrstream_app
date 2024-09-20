@@ -9,6 +9,7 @@ export interface IStream extends BaseEntity {
   published_at: Date;
   stopped_at: Date;
   guidance_command: string;
+  thumbnail_url: string;
 }
 
 export interface ICreateStreamInput {

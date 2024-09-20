@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IStream } from '../entities/stream.entity';
 import {
   CreateNewStreamButton,
   CreateNewStreamPopup,
   GuidancePopup,
   MyStreamList,
+  MyStreamViewPopup,
 } from '../page_components/my_streams_page.component';
 import { APIBuilder } from '../services/base.service';
 import streamService from '../services/stream.service';
 
 export default function MyStreamsPage() {
+  const navigate = useNavigate();
   const [createStreamPopupVisible, setCreateNewStreamPopupVisible] = useState(false);
   const [guidanceCommandPopupVisible, setGuidanceCommandPopupVisible] = useState(false);
+  const [viewStreamPopupVisible, setViewStreamPopupVisible] = useState(false);
   const [streams, setStreams] = useState<IStream[]>([]);
   const [selectedStream, setSelectedStream] = useState<IStream>({} as IStream);
   const [page, setPage] = useState(0);
@@ -26,10 +30,12 @@ export default function MyStreamsPage() {
     setGuidanceCommandPopupVisible(true);
   };
   const handleItemClick = (stream: IStream) => {
+    setSelectedStream(stream);
     if (!stream.is_publishing) {
-      setSelectedStream(stream);
       setGuidanceCommandPopupVisible(true);
+      return;
     }
+    setViewStreamPopupVisible(true);
   };
   const fetchMyStreams = async () => {
     setIsLoading(true);
@@ -41,6 +47,7 @@ export default function MyStreamsPage() {
       setTotal(res.total);
     } catch (error) {
       console.log(error);
+      navigate('/error');
     }
     setIsLoading(false);
   };
@@ -60,6 +67,9 @@ export default function MyStreamsPage() {
           guidancePublishCommand={selectedStream.guidance_command}
           onClose={() => setGuidanceCommandPopupVisible(false)}
         />
+      )}
+      {viewStreamPopupVisible && (
+        <MyStreamViewPopup hls_url={selectedStream.hls_url} onClose={() => setViewStreamPopupVisible(false)} />
       )}
     </div>
   );

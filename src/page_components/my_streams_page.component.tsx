@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { useState } from 'react';
-import { VideoPlaceholder } from '../assets/video_placeholder';
 import { Input } from '../components/Input.component';
 import { Popup, PopupCloseActionButton, PopupException, PopupSubmitActionButton } from '../components/Popup.component';
+import { VideoPlayer, VideoTypes } from '../components/Video.component';
+import ThumbnailComponent from '../components/VideoThumbnail.component';
 import { ICreateStreamInput, IStream } from '../entities/stream.entity';
 import SignalIcon from '../icons/Signal.icon';
 import SignalSlashIcon from '../icons/SignalSlash.icon';
@@ -141,7 +142,7 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
       onClick={() => props.onClick()}
       className='fade-in shadow-lg overflow-hidden rounded-lg flex flex-col gap-2 bg-slate-50 cursor-pointer hover:shadow-xl transition-all duration-100'
     >
-      <VideoPlaceholder className='w-full h-36 object-cover shadow-sm rounded-b-lg' />
+      <ThumbnailComponent thumbnail_url={props.stream.thumbnail_url} />
       <div className='px-2 flex justify-between flex-col h-full'>
         <div className='h-full'>
           <h2 className='font-semibold text-gray-800'>{props.stream.title}</h2>
@@ -158,4 +159,24 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
 
 function MyStreamItemSkeleton() {
   return <div className='h-60 rounded-lg bg-slate-300 animate-pulse'></div>;
+}
+
+export function MyStreamViewPopup(props: { hls_url: string; onClose: () => void }) {
+  return (
+    <Popup
+      title='Guidance'
+      className='flex flex-col gap-1 w-[80%] h-[80%]'
+      action={[
+        <div key={0} className='flex w-full gap-1 justify-between'>
+          <div className='flex gap-1 w-full justify-end'>
+            <PopupCloseActionButton onClose={() => props.onClose()} />
+          </div>
+        </div>,
+      ]}
+    >
+      <div className='w-full h-full p-4 pb-20 flex flex-col gap-2'>
+        <VideoPlayer src={props.hls_url} type={VideoTypes.X_MPEGURL} autoplay />
+      </div>
+    </Popup>
+  );
 }
