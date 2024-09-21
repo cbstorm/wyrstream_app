@@ -201,9 +201,9 @@ function StreamLogs(props: { logs: IStreamLog[] }) {
     <div className='flex flex-col gap-2 h-[20%] bg-slate-200 p-2 rounded-lg overflow-y-auto'>
       <h2 className='font-bold text-lg text-gray-800'>Logs:</h2>
       <div className='flex flex-col overflow-y-auto'>
-        {props.logs.map((e) => {
+        {props.logs.map((e, idx) => {
           return (
-            <div className='flex gap-1 text-sm'>
+            <div key={idx} className='flex gap-1 text-sm'>
               <span className='font-bold'>{moment(e.createdAt).format('HH:mm:ss DD/MM/YYYY')}</span>
               <span className='font-bold'>{'>'}</span>
               <span className=''>{e.log}</span>
