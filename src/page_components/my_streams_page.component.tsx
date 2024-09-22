@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import { useState } from 'react';
-import { Input } from '../components/Input.component';
+import { CheckBox, Input } from '../components/Input.component';
 import { Popup, PopupCloseActionButton, PopupException, PopupSubmitActionButton } from '../components/Popup.component';
 import { VideoPlayer, VideoTypes } from '../components/Video.component';
 import ThumbnailComponent from '../components/VideoThumbnail.component';
@@ -60,6 +60,9 @@ export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (strea
   const handleDescriptionChange = (desc: string) => {
     setCreateStreamInput((prev) => ({ ...prev, description: desc }));
   };
+  const handleEnableRecordChange = (enable: boolean) => {
+    setCreateStreamInput((prev) => ({ ...prev, enable_record: enable }));
+  };
 
   const disableSubmit = () => {
     return !createStreamInput.title || !createStreamInput.description || submitting;
@@ -97,15 +100,23 @@ export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (strea
           value={createStreamInput.description}
           onChange={(e) => handleDescriptionChange(e as string)}
         />
+        <CheckBox
+          name='enable_record'
+          label='Recording'
+          title='Enable Recording'
+          description='Allow this stream to be recorded for future playback. When enabled, the stream will be saved and can be accessed later for on-demand viewing.'
+          checked={createStreamInput.enable_record}
+          onChange={(v) => handleEnableRecordChange(v)}
+        />
       </div>
     </Popup>
   );
 }
 
-export function GuidancePopup(props: { onClose: () => void; guidancePublishCommand: string }) {
+export function StreamInfoPopup(props: { onClose: () => void; stream: IStream }) {
   return (
     <Popup
-      title='Guidance'
+      title='Stream Information'
       className='flex flex-col gap-1 w-[50%] h-auto'
       action={[
         <div key={0} className='flex w-full gap-1 justify-between'>
@@ -116,7 +127,8 @@ export function GuidancePopup(props: { onClose: () => void; guidancePublishComma
       ]}
     >
       <div className='w-full h-full overflow-y-auto p-4 pb-20 flex flex-col gap-2'>
-        <Input name='guidance' onChange={() => {}} value={props.guidancePublishCommand} placeholder='' disabled />
+        {/* <Input label="URL" value={props.stream.} /> */}
+        <Input label='FFmpeg guidance command' name='guidance' onChange={() => {}} value={props.stream.guidance_command} placeholder='' disabled />
       </div>
     </Popup>
   );

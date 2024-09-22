@@ -4,6 +4,7 @@ import { IStreamLog } from './stream_log.entity';
 export interface IStream extends BaseEntity {
   title: string;
   description: string;
+  enable_record: boolean;
   hls_url: string;
   stream_id: string;
   is_publishing: boolean;
@@ -17,6 +18,7 @@ export interface IStream extends BaseEntity {
 export interface ICreateStreamInput {
   title: string;
   description: string;
+  enable_record: boolean;
 }
 
 export interface IUpdateStreamInput {

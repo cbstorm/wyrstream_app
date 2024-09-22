@@ -6,9 +6,9 @@ import { IStream } from '../entities/stream.entity';
 import {
   CreateNewStreamButton,
   CreateNewStreamPopup,
-  GuidancePopup,
   MyStreamList,
   MyStreamViewPopup,
+  StreamInfoPopup,
 } from '../page_components/my_streams_page.component';
 import { APIBuilder } from '../services/base.service';
 import streamService from '../services/stream.service';
@@ -63,8 +63,8 @@ export default function MyStreamsPage() {
         <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={handleNew} />
       )}
       {guidanceCommandPopupVisible && (
-        <GuidancePopup
-          guidancePublishCommand={selectedStream.guidance_command}
+        <StreamInfoPopup
+          stream={selectedStream}
           onClose={() => setGuidanceCommandPopupVisible(false)}
         />
       )}

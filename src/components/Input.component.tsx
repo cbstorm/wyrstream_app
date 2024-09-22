@@ -39,3 +39,40 @@ export function Input(props: {
     </div>
   );
 }
+
+export function CheckBox(props: {
+  name: string;
+  label?: string;
+  title: string;
+  description?: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <div className='flex flex-col gap-1 items-start'>
+      {props.label && (
+        <label className='block text-xs font-semibold text-gray-600 text-center line'>{props.label}</label>
+      )}
+      <label
+        htmlFor='Option1'
+        className='flex cursor-pointer items-start gap-4 rounded-lg border bg-gray-50 border-gray-200 p-4 transition hover:bg-blue-50 has-[:checked]:bg-blue-100 w-full'
+      >
+        <div className='flex items-center'>
+          &#8203;
+          <input
+            type='checkbox'
+            className='size-4 rounded border-gray-300'
+            name={props.name}
+            checked={props.checked}
+            onChange={(e) => props.onChange(e.target.checked)}
+          />
+        </div>
+
+        <div>
+          <strong className='font-medium text-sm text-gray-900'>{props.title}</strong>
+          {props.description && <p className='mt-1 text-pretty text-sm text-gray-700'>{props.description}</p>}
+        </div>
+      </label>
+    </div>
+  );
+}
