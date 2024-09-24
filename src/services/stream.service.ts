@@ -19,6 +19,11 @@ class StreamService extends BaseService {
     inp.setPath('/streams');
     return this.Post<ICreateStreamInput, IStream>(inp);
   }
+
+  async ConvertStreamToVOD(inp: APIBuilder) {
+    inp.setPath('/streams/vod');
+    return this.Post<void, IStream>(inp);
+  }
   async UpdateOneStream(inp: APIBuilder<IUpdateStreamInput>) {
     inp.setPath('/streams');
     return await this.Put<IUpdateStreamInput, IStream>(inp);

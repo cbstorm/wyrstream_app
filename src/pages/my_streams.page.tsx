@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IStream } from '../entities/stream.entity';
 import {
+  ConfirmConvertVODPopup,
   CreateNewStreamButton,
   CreateNewStreamPopup,
   MyStreamList,
@@ -16,8 +17,9 @@ import streamService from '../services/stream.service';
 export default function MyStreamsPage() {
   const navigate = useNavigate();
   const [createStreamPopupVisible, setCreateNewStreamPopupVisible] = useState(false);
-  const [guidanceCommandPopupVisible, setGuidanceCommandPopupVisible] = useState(false);
+  const [streamInfoPopupVisible, setStreamInfoPopupVisible] = useState(false);
   const [viewStreamPopupVisible, setViewStreamPopupVisible] = useState(false);
+  const [confirmConvertVODPopupVisible, setconfirmConvertVODPopupVisible] = useState(false);
   const [streams, setStreams] = useState<IStream[]>([]);
   const [selectedStream, setSelectedStream] = useState<IStream>({} as IStream);
   const [page, setPage] = useState(0);
@@ -27,12 +29,12 @@ export default function MyStreamsPage() {
     setStreams((prev) => [stream, ...prev]);
     setCreateNewStreamPopupVisible(false);
     setSelectedStream(stream);
-    setGuidanceCommandPopupVisible(true);
+    setStreamInfoPopupVisible(true);
   };
   const handleItemClick = (stream: IStream) => {
     setSelectedStream(stream);
     if (!stream.is_publishing) {
-      setGuidanceCommandPopupVisible(true);
+      setStreamInfoPopupVisible(true);
       return;
     }
     setViewStreamPopupVisible(true);
@@ -51,6 +53,17 @@ export default function MyStreamsPage() {
     }
     setIsLoading(false);
   };
+
+  const handleConvertVOD = async (stream: IStream) => {
+    try {
+      const apiBuilder = new APIBuilder().addParam(stream._id);
+      await streamService.ConvertStreamToVOD(apiBuilder);
+    } catch (error) {
+      console.log(error);
+      navigate('/error');
+    }
+  };
+
   useEffect(() => {
     fetchMyStreams();
   }, []);
@@ -62,10 +75,20 @@ export default function MyStreamsPage() {
       {createStreamPopupVisible && (
         <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={handleNew} />
       )}
-      {guidanceCommandPopupVisible && (
+      {streamInfoPopupVisible && (
         <StreamInfoPopup
           stream={selectedStream}
-          onClose={() => setGuidanceCommandPopupVisible(false)}
+          onConvertVOD={() => {
+            setStreamInfoPopupVisible(false);
+            setconfirmConvertVODPopupVisible(true);
+          }}
+          onClose={() => setStreamInfoPopupVisible(false)}
+        />
+      )}
+      {confirmConvertVODPopupVisible && (
+        <ConfirmConvertVODPopup
+          onConfirm={() => handleConvertVOD(selectedStream)}
+          onCancel={() => setconfirmConvertVODPopupVisible(false)}
         />
       )}
       {viewStreamPopupVisible && (

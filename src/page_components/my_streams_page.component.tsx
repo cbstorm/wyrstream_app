@@ -10,6 +10,7 @@ import { IStreamLog } from '../entities/stream_log.entity';
 import CheckIcon from '../icons/Check.icon';
 import CloseIcon from '../icons/Close.icon';
 import PencilSquareIcon from '../icons/PencilSquare.icon';
+import PlayCircleIcon from '../icons/PlayCircle.icon';
 import { RecordIcon, RecordSlash } from '../icons/Record.icon';
 import { SignalIcon, SignalSlashIcon } from '../icons/Signal.icon';
 import { APIBuilder } from '../services/base.service';
@@ -116,7 +117,7 @@ export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (strea
   );
 }
 
-export function StreamInfoPopup(props: { onClose: () => void; stream: IStream }) {
+export function StreamInfoPopup(props: { onClose: () => void; onConvertVOD: () => void; stream: IStream }) {
   const [edit, setEdit] = useState(false);
   const [updateStreamInput, setUpdateStreamInput] = useState<IUpdateStreamInput>({} as IUpdateStreamInput);
   const handleEdit = (isEdit: boolean) => {
@@ -161,6 +162,18 @@ export function StreamInfoPopup(props: { onClose: () => void; stream: IStream })
       action={[
         <div key={0} className='flex w-full gap-1 justify-between'>
           <div className='flex gap-1 w-full justify-end'>
+            {/* Convert VOD button */}
+            {/* Stream is Enable Recording and Stream is ready for VOD */}
+            {props.stream.enable_record && props.stream.ready_for_vod && (
+              <button
+                onClick={() => props.onConvertVOD()}
+                className='flex gap-1 items-center bg-white border border-cyan-800 rounded-lg px-3 py-2 text-cyan-800 text-sm font-semibold hover:bg-cyan-50 hover:text-opacity-60 transition-all duration-100'
+              >
+                <PlayCircleIcon />
+                <span>Convert to VOD and close the stream</span>
+              </button>
+            )}
+            {/* Close Button */}
             <PopupCloseActionButton onClose={() => props.onClose()} />
           </div>
         </div>,
@@ -255,6 +268,31 @@ export function StreamInfoPopup(props: { onClose: () => void; stream: IStream })
           placeholder=''
           disabled
         />
+      </div>
+    </Popup>
+  );
+}
+
+export function ConfirmConvertVODPopup(props: { onConfirm: () => void; onCancel: () => void }) {
+  return (
+    <Popup title='Convert Stream to Video on Demand'>
+      <div>
+        Are you sure you want to convert this live stream to a Video on Demand? This action will save the current stream
+        as a video that can be watched later.
+      </div>
+      <div className='flex gap-1 items-center justify-end'>
+        <button
+          onClick={() => props.onCancel()}
+          className='bg-white border border-rose-800 rounded-lg px-3 py-2 text-rose-800 text-sm font-semibold hover:bg-rose-50 hover:text-opacity-60 transition-all duration-100'
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => props.onConfirm()}
+          className='bg-white border border-cyan-800 rounded-lg px-3 py-2 text-cyan-800 text-sm font-semibold hover:bg-cyan-50 hover:text-opacity-60 transition-all duration-100'
+        >
+          OK
+        </button>
       </div>
     </Popup>
   );
