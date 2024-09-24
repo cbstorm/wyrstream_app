@@ -2,6 +2,34 @@ import axios from 'axios';
 import _ from 'lodash';
 import { BASE_URL } from '../configs/config';
 
+class RefreshTokenControl {
+  private _lock: boolean = false;
+  private _unlock_func!: (value: any) => void;
+  private _wait_func!: Promise<void>;
+  Lock() {
+    this._lock = true;
+    this._wait_func = new Promise((resolve) => {
+      this._unlock_func = resolve;
+    });
+    return this._wait_func;
+  }
+  IsLocking() {
+    return this._lock;
+  }
+  async Wait() {
+    if (this._wait_func) {
+      await this._wait_func;
+    }
+  }
+  Unlock() {
+    if (this._unlock_func) {
+      this._unlock_func(true);
+    }
+    this._lock = false;
+  }
+}
+const refresh_control = new RefreshTokenControl();
+
 export const MAX_ATTEMPT = 3;
 
 export function getAccessToken(): string {
@@ -65,6 +93,11 @@ async function callAPI<I, O>(
   } catch (error: any) {
     console.log({ error });
     if ((error as any)?.response?.data?.name === 'UNAUTHORIZED' && attempt < MAX_ATTEMPT) {
+      if (refresh_control.IsLocking()) {
+        await refresh_control.Wait();
+        return await callAPI(inp, attempt + 1);
+      }
+      refresh_control.Lock();
       const refreshRes: { new_token: string; new_refresh_token: string } = await axiosInstance({
         url: '/auth/user/refresh_token',
         method: 'POST',
@@ -72,6 +105,7 @@ async function callAPI<I, O>(
       }).then((res) => res.data);
       setAccessToken(refreshRes.new_token);
       setRefreshToken(refreshRes.new_refresh_token);
+      refresh_control.Unlock();
       return await callAPI(inp, attempt + 1);
     } else {
       throw new Error((error as any)?.response?.data?.message);

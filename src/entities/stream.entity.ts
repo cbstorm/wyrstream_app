@@ -12,6 +12,8 @@ export interface IStream extends BaseEntity {
   stopped_at: Date;
   guidance_command: string;
   thumbnail_url: string;
+  ready_for_vod: boolean;
+  stream_server_url: string;
   stream_logs: IStreamLog[];
 }
 

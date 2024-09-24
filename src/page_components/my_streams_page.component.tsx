@@ -127,8 +127,15 @@ export function StreamInfoPopup(props: { onClose: () => void; stream: IStream })
       ]}
     >
       <div className='w-full h-full overflow-y-auto p-4 pb-20 flex flex-col gap-2'>
-        {/* <Input label="URL" value={props.stream.} /> */}
-        <Input label='FFmpeg guidance command' name='guidance' onChange={() => {}} value={props.stream.guidance_command} placeholder='' disabled />
+        <Input label='Server' value={props.stream.stream_server_url} name='' onChange={() => {}} placeholder='' disabled />
+        <Input
+          label='FFmpeg guidance command'
+          name='guidance'
+          onChange={() => {}}
+          value={props.stream.guidance_command}
+          placeholder=''
+          disabled
+        />
       </div>
     </Popup>
   );
