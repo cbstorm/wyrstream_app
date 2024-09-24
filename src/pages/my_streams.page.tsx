@@ -58,6 +58,7 @@ export default function MyStreamsPage() {
     try {
       const apiBuilder = new APIBuilder().addParam(stream._id);
       await streamService.ConvertStreamToVOD(apiBuilder);
+      setconfirmConvertVODPopupVisible(false);
     } catch (error) {
       console.log(error);
       navigate('/error');
@@ -70,7 +71,10 @@ export default function MyStreamsPage() {
 
   return (
     <div className='flex flex-col gap-4'>
-      <CreateNewStreamButton onClick={() => setCreateNewStreamPopupVisible(true)} />
+      <div className='flex justify-between items-center'>
+        <h2 className='text-lg font-semibold text-gray-800'>My streams</h2>
+        <CreateNewStreamButton onClick={() => setCreateNewStreamPopupVisible(true)} />
+      </div>
       <MyStreamList isLoading={isLoading} streams={streams} onItemClick={handleItemClick} />
       {createStreamPopupVisible && (
         <CreateNewStreamPopup onClose={() => setCreateNewStreamPopupVisible(false)} onNew={handleNew} />

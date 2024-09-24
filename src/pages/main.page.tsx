@@ -7,6 +7,7 @@ import Sidebar from '../components/Sidebar.component';
 import authService from '../services/auth.service';
 import { UserState } from '../states/user.state';
 import MyStreamsPage from './my_streams.page';
+import MyVideosPage from './my_videos.page';
 
 export default function MainPage() {
   return (
@@ -50,6 +51,7 @@ function MainComponent() {
         <div className='pt-24 px-8 w-5/6'>
           <Routes>
             <Route path='/my_streams' element={<MyStreamsPage />} />
+            <Route path='/my_videos' element={<MyVideosPage />} />
           </Routes>
         </div>
       </div>
