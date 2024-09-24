@@ -47,6 +47,7 @@ export function CheckBox(props: {
   description?: string;
   checked: boolean;
   onChange: (value: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
     <div className='flex flex-col gap-1 items-start'>
@@ -54,8 +55,7 @@ export function CheckBox(props: {
         <label className='block text-xs font-semibold text-gray-600 text-center line'>{props.label}</label>
       )}
       <label
-        htmlFor='Option1'
-        className='flex cursor-pointer items-start gap-4 rounded-lg border bg-gray-50 border-gray-200 p-4 transition hover:bg-blue-50 has-[:checked]:bg-blue-100 w-full'
+        className='flex cursor-pointer items-start gap-4 rounded-lg border bg-gray-50 border-gray-200 p-4 transition hover:bg-blue-50 has-[:checked]:bg-blue-100 w-full has-[:disabled]:bg-gray-200'
       >
         <div className='flex items-center'>
           &#8203;
@@ -65,6 +65,7 @@ export function CheckBox(props: {
             name={props.name}
             checked={props.checked}
             onChange={(e) => props.onChange(e.target.checked)}
+            disabled={props.disabled}
           />
         </div>
 

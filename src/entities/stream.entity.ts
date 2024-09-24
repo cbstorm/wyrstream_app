@@ -14,6 +14,8 @@ export interface IStream extends BaseEntity {
   thumbnail_url: string;
   ready_for_vod: boolean;
   stream_server_url: string;
+  stream_url: string;
+  shown_publish_key: string;
   stream_logs: IStreamLog[];
 }
 
@@ -26,6 +28,7 @@ export interface ICreateStreamInput {
 export interface IUpdateStreamInput {
   title: string;
   description: string;
+  enable_record: boolean;
 }
 
 export interface FetchStreamsResponse extends IFetchResponse<IStream> {}

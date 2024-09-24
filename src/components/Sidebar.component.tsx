@@ -2,7 +2,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import DashboardIcon from '../icons/Dashboard.icon';
 import PlayCircleIcon from '../icons/PlayCircle.icon';
-import SignalIcon from '../icons/Signal.icon';
+import { SignalIcon } from '../icons/Signal.icon';
 import { Logo } from './Logo.component';
 
 export default function Sidebar(props: { className: string; isLoading: boolean }) {

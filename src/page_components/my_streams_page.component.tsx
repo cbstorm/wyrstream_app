@@ -5,10 +5,13 @@ import { CheckBox, Input } from '../components/Input.component';
 import { Popup, PopupCloseActionButton, PopupException, PopupSubmitActionButton } from '../components/Popup.component';
 import { VideoPlayer, VideoTypes } from '../components/Video.component';
 import ThumbnailComponent from '../components/VideoThumbnail.component';
-import { ICreateStreamInput, IStream } from '../entities/stream.entity';
+import { ICreateStreamInput, IStream, IUpdateStreamInput } from '../entities/stream.entity';
 import { IStreamLog } from '../entities/stream_log.entity';
-import SignalIcon from '../icons/Signal.icon';
-import SignalSlashIcon from '../icons/SignalSlash.icon';
+import CheckIcon from '../icons/Check.icon';
+import CloseIcon from '../icons/Close.icon';
+import PencilSquareIcon from '../icons/PencilSquare.icon';
+import { RecordIcon, RecordSlash } from '../icons/Record.icon';
+import { SignalIcon, SignalSlashIcon } from '../icons/Signal.icon';
 import { APIBuilder } from '../services/base.service';
 import streamService from '../services/stream.service';
 import { Validator } from '../utils/validator';
@@ -114,6 +117,43 @@ export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (strea
 }
 
 export function StreamInfoPopup(props: { onClose: () => void; stream: IStream }) {
+  const [edit, setEdit] = useState(false);
+  const [updateStreamInput, setUpdateStreamInput] = useState<IUpdateStreamInput>({} as IUpdateStreamInput);
+  const handleEdit = (isEdit: boolean) => {
+    if (!edit && isEdit) {
+      setEdit(true);
+      return;
+    }
+    if (edit && !isEdit) {
+      setUpdateStreamInput({} as IUpdateStreamInput);
+      setEdit(false);
+    }
+  };
+
+  const handleTitleChange = (title: string) => {
+    setUpdateStreamInput((prev) => ({ ...prev, title }));
+  };
+  const handleDescriptionChange = (description: string) => {
+    setUpdateStreamInput((prev) => ({ ...prev, description }));
+  };
+  const handleEnableRecordingChange = (enableRecord: boolean) => {
+    setUpdateStreamInput((prev) => ({ ...prev, enable_record: enableRecord }));
+  };
+  const handleSubmit = async () => {
+    try {
+      const body: IUpdateStreamInput = {
+        title: updateStreamInput.title || props.stream.title,
+        description: updateStreamInput.description || props.stream.description,
+        enable_record:
+          updateStreamInput.enable_record !== undefined ? updateStreamInput.enable_record : props.stream.enable_record,
+      };
+      const apiBuidler = new APIBuilder<IUpdateStreamInput>().addParam(props.stream._id).setBody(body);
+      await streamService.UpdateOneStream(apiBuidler);
+      setEdit(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Popup
       title='Stream Information'
@@ -126,11 +166,90 @@ export function StreamInfoPopup(props: { onClose: () => void; stream: IStream })
         </div>,
       ]}
     >
+      <div className='flex justify-end'>
+        {!edit && (
+          <button
+            className='p-1 flex items-center gap-1 border-orange-400 border rounded-lg hover:'
+            onClick={() => handleEdit(true)}
+          >
+            <PencilSquareIcon className='text-orange-400 w-6 h-6' />
+            <span className='text-sm text-orange-400 font-medium'>Edit</span>
+          </button>
+        )}
+        {edit && (
+          <div className='flex gap-1'>
+            <button
+              className='p-1 flex items-center gap-1 border-teal-600 border rounded-lg'
+              onClick={() => handleSubmit()}
+            >
+              <CheckIcon className='text-teal-600 w-6 h-6' />
+              <span className='text-sm text-teal-600 font-medium'>Ok</span>
+            </button>
+            <button
+              className='p-1 flex items-center gap-1 border-amber-600 border rounded-lg'
+              onClick={() => handleEdit(false)}
+            >
+              <CloseIcon className='text-amber-600 w-6 h-6' />
+              <span className='text-sm text-amber-600 font-medium'>Cancel</span>
+            </button>
+          </div>
+        )}
+      </div>
       <div className='w-full h-full overflow-y-auto p-4 pb-20 flex flex-col gap-2'>
-        <Input label='Server' value={props.stream.stream_server_url} name='' onChange={() => {}} placeholder='' disabled />
+        <Input
+          label='Title'
+          value={updateStreamInput.title || props.stream.title}
+          name='title'
+          onChange={(v) => handleTitleChange(v as string)}
+          placeholder='Title'
+          disabled={!edit}
+        />
+        <Input
+          label='Description'
+          value={updateStreamInput.description || props.stream.description}
+          name='description'
+          onChange={(v) => handleDescriptionChange(v as string)}
+          placeholder='Description'
+          disabled={!edit}
+        />
+        <CheckBox
+          name='enable_record'
+          label='Recording'
+          title='Enable Recording'
+          description='Allow this stream to be recorded for future playback. When enabled, the stream will be saved and can be accessed later for on-demand viewing.'
+          checked={
+            updateStreamInput.enable_record !== undefined ? updateStreamInput.enable_record : props.stream.enable_record
+          }
+          onChange={(v) => handleEnableRecordingChange(v)}
+          disabled={!edit}
+        />
+        <Input
+          label='Server'
+          value={props.stream.stream_server_url}
+          name='stream_server_url'
+          onChange={() => {}}
+          placeholder=''
+          disabled
+        />
+        <Input
+          label='Stream ID'
+          value={props.stream.stream_id}
+          name='stream_id'
+          onChange={() => {}}
+          placeholder=''
+          disabled
+        />
+        <Input
+          label='Stream URL'
+          value={props.stream.stream_url}
+          name='stream_url'
+          onChange={() => {}}
+          placeholder=''
+          disabled
+        />
         <Input
           label='FFmpeg guidance command'
-          name='guidance'
+          name='guidance_command'
           onChange={() => {}}
           value={props.stream.guidance_command}
           placeholder=''
@@ -173,10 +292,17 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
       <ThumbnailComponent thumbnail_url={props.stream.thumbnail_url} />
       <div className='px-2 flex justify-between flex-col h-full'>
         <div className='h-full'>
+          <div className='flex justify-end'>
+            <span className='font-semibold text-xs text-indigo-400'>#{props.stream.stream_id}</span>
+          </div>
           <h2 className='font-semibold text-gray-800'>{props.stream.title}</h2>
           <span className='text-sm text-gray-600'>{props.stream.description}</span>
         </div>
-        <div className='flex justify-end py-2'>
+        <div className='flex justify-end gap-2 py-2'>
+          {props.stream.enable_record && (
+            <RecordIcon className={'w-6 h-6 text-fuchsia-800 ' + (props.stream.is_publishing ? 'blink' : '')} />
+          )}
+          {!props.stream.enable_record && <RecordSlash className='text-fuchsia-800 w-6 h-6' />}
           {props.stream.is_publishing && <SignalIcon className='text-emerald-600 w-6 h-6 blink' />}
           {!props.stream.is_publishing && <SignalSlashIcon className='text-amber-600 w-6 h-6' />}
         </div>
