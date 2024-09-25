@@ -9,9 +9,9 @@ export default function ThumbnailComponent(props: { thumbnail_url: string }) {
         src={props.thumbnail_url}
         onError={() => setIsError(true)}
         alt='thumbnail'
-        className='w-full h-36 object-cover shadow-sm rounded-b-md'
+        className='w-full h-48 object-cover shadow-sm rounded-b-md'
       />
     );
   }
-  return <VideoPlaceholder className='w-full h-36 object-cover shadow-sm rounded-b-md' />;
+  return <VideoPlaceholder className='w-full h-48 object-cover shadow-sm rounded-b-md' />;
 }

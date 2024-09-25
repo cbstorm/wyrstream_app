@@ -7,6 +7,7 @@ import { VideoPlayer, VideoTypes } from '../components/Video.component';
 import ThumbnailComponent from '../components/VideoThumbnail.component';
 import { ICreateStreamInput, IStream, IUpdateStreamInput } from '../entities/stream.entity';
 import { IStreamLog } from '../entities/stream_log.entity';
+import { ArchiveBoxX } from '../icons/ArchiveBox.icon';
 import CheckIcon from '../icons/Check.icon';
 import CloseIcon from '../icons/Close.icon';
 import PencilSquareIcon from '../icons/PencilSquare.icon';
@@ -117,7 +118,12 @@ export function CreateNewStreamPopup(props: { onClose: () => void; onNew: (strea
   );
 }
 
-export function StreamInfoPopup(props: { onClose: () => void; onConvertVOD: () => void; stream: IStream }) {
+export function StreamInfoPopup(props: {
+  onClose: () => void;
+  onConvertVOD: () => void;
+  closeStream: () => void;
+  stream: IStream;
+}) {
   const [edit, setEdit] = useState(false);
   const [updateStreamInput, setUpdateStreamInput] = useState<IUpdateStreamInput>({} as IUpdateStreamInput);
   const handleEdit = (isEdit: boolean) => {
@@ -164,6 +170,16 @@ export function StreamInfoPopup(props: { onClose: () => void; onConvertVOD: () =
           <div className='flex gap-1 w-full justify-end'>
             {/* Convert VOD button */}
             {/* Stream is Enable Recording and Stream is ready for VOD */}
+            {props.stream.stopped_at && (
+              <button
+                onClick={() => props.closeStream()}
+                className='flex gap-1 items-center bg-white border border-rose-800 rounded-lg px-3 py-2 text-rose-800 text-sm font-semibold hover:bg-cyan-50 hover:text-opacity-60 transition-all duration-100'
+              >
+                <ArchiveBoxX />
+                <span>Close the stream</span>
+              </button>
+            )}
+            {/* Close stream button */}
             {props.stream.enable_record && props.stream.ready_for_vod && (
               <button
                 onClick={() => props.onConvertVOD()}
@@ -173,13 +189,14 @@ export function StreamInfoPopup(props: { onClose: () => void; onConvertVOD: () =
                 <span>Convert to VOD and close the stream</span>
               </button>
             )}
-            {/* Close Button */}
+            {/* Close popup Button */}
             <PopupCloseActionButton onClose={() => props.onClose()} />
           </div>
         </div>,
       ]}
     >
       <div className='flex justify-end'>
+        {/* Edit button */}
         {!edit && (
           <button
             className='p-1 flex items-center gap-1 border-orange-400 border rounded-lg hover:'
@@ -273,12 +290,26 @@ export function StreamInfoPopup(props: { onClose: () => void; onConvertVOD: () =
   );
 }
 
-export function ConfirmConvertVODPopup(props: { onConfirm: () => void; onCancel: () => void }) {
+export function ConfirmActionPopup(props: {
+  onConfirm: () => void;
+  onCancel: () => void;
+  type: 'conv-vod' | 'close-stream';
+}) {
   return (
-    <Popup title='Convert Stream to Video on Demand'>
-      <div>
-        Are you sure you want to convert this live stream to a Video on Demand? This action will save the current stream
-        as a video that can be watched later.
+    <Popup title={props.type === 'conv-vod' ? 'Convert Stream to Video on Demand' : 'Close Video Stream'}>
+      <div className='py-4'>
+        {props.type === 'conv-vod' && (
+          <span>
+            Are you sure you want to convert this live stream to a Video on Demand? This action will save the current
+            stream as a video that can be watched later.
+          </span>
+        )}
+        {props.type === 'close-stream' && (
+          <span>
+            Are you sure you want to close this live stream? This action will stop the stream and it will no longer be
+            available for viewers.
+          </span>
+        )}
       </div>
       <div className='flex gap-1 items-center justify-end'>
         <button
@@ -305,18 +336,18 @@ export function MyStreamList(props: {
 }) {
   return (
     <div className='grid grid-cols-4 gap-2'>
+      {props.streams.map((e, idx) => {
+        return <MyStreamItem key={idx} stream={e} onClick={() => props.onItemClick(e)} />;
+      })}
       {props.isLoading &&
         _.times(4, (i) => {
           return <MyStreamItemSkeleton key={i} />;
         })}
-      {!props.streams.length && (
+      {!props.isLoading && !props.streams.length && (
         <div className='flex justify-center col-span-full'>
           <span className='text-gray-600 font-medium'>You do not have any stream</span>
         </div>
       )}
-      {props.streams.map((e, idx) => {
-        return <MyStreamItem key={idx} stream={e} onClick={() => props.onItemClick(e)} />;
-      })}
     </div>
   );
 }

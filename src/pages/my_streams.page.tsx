@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IStream } from '../entities/stream.entity';
 import {
-  ConfirmConvertVODPopup,
+  ConfirmActionPopup,
   CreateNewStreamButton,
   CreateNewStreamPopup,
   MyStreamList,
@@ -19,7 +19,8 @@ export default function MyStreamsPage() {
   const [createStreamPopupVisible, setCreateNewStreamPopupVisible] = useState(false);
   const [streamInfoPopupVisible, setStreamInfoPopupVisible] = useState(false);
   const [viewStreamPopupVisible, setViewStreamPopupVisible] = useState(false);
-  const [confirmConvertVODPopupVisible, setconfirmConvertVODPopupVisible] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<'conv-vod' | 'close-stream'>('close-stream');
+  const [confirmActionPopupVisible, setConfirmActionPopup] = useState(false);
   const [streams, setStreams] = useState<IStream[]>([]);
   const [selectedStream, setSelectedStream] = useState<IStream>({} as IStream);
   const [page, setPage] = useState(0);
@@ -58,7 +59,20 @@ export default function MyStreamsPage() {
     try {
       const apiBuilder = new APIBuilder().addParam(stream._id);
       await streamService.ConvertStreamToVOD(apiBuilder);
-      setconfirmConvertVODPopupVisible(false);
+      setStreams((prev) => prev.filter((e) => e._id !== stream._id));
+      setConfirmActionPopup(false);
+    } catch (error) {
+      console.log(error);
+      navigate('/error');
+    }
+  };
+
+  const handleCloseStream = async (stream: IStream) => {
+    try {
+      const apiBuilder = new APIBuilder().addParam(stream._id);
+      await streamService.DeleteOneStream(apiBuilder);
+      setStreams((prev) => prev.filter((e) => e._id !== stream._id));
+      setConfirmActionPopup(false);
     } catch (error) {
       console.log(error);
       navigate('/error');
@@ -84,15 +98,28 @@ export default function MyStreamsPage() {
           stream={selectedStream}
           onConvertVOD={() => {
             setStreamInfoPopupVisible(false);
-            setconfirmConvertVODPopupVisible(true);
+            setConfirmAction('conv-vod');
+            setConfirmActionPopup(true);
+          }}
+          closeStream={() => {
+            setStreamInfoPopupVisible(false);
+            setConfirmAction('close-stream');
+            setConfirmActionPopup(true);
           }}
           onClose={() => setStreamInfoPopupVisible(false)}
         />
       )}
-      {confirmConvertVODPopupVisible && (
-        <ConfirmConvertVODPopup
-          onConfirm={() => handleConvertVOD(selectedStream)}
-          onCancel={() => setconfirmConvertVODPopupVisible(false)}
+      {confirmActionPopupVisible && (
+        <ConfirmActionPopup
+          onConfirm={() => {
+            if (confirmAction === 'conv-vod') {
+              handleConvertVOD(selectedStream);
+              return;
+            }
+            handleCloseStream(selectedStream);
+          }}
+          onCancel={() => setConfirmActionPopup(false)}
+          type={confirmAction}
         />
       )}
       {viewStreamPopupVisible && (
