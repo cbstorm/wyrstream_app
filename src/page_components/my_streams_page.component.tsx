@@ -402,6 +402,7 @@ export function MyStreamViewPopup(props: { stream: IStream; onClose: () => void 
           src={props.stream.hls_url}
           type={VideoTypes.X_MPEGURL}
           autoplay
+          controls
           className='w-full h-full object-cover rounded-lg'
         />
         <StreamLogs logs={props.stream.stream_logs} />

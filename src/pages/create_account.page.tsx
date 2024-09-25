@@ -143,7 +143,7 @@ export function RightSide() {
               disabled={isDisableSubmitButton()}
               className='bg-gray-800 px-6 py-3 text-white font-bold rounded-md border-[1px] border-gray-200 hover:bg-white hover:border-gray-800 hover:text-gray-800 disabled:bg-opacity-30 disabled:hover:bg-gray-400 disabled:hover:border-none disabled:hover:text-white disabled:border-none transition-all duration-150 flex justify-center max-w-max'
             >
-              {!isPending && <span>SIGN IN</span>}
+              {!isPending && <span>CREATE</span>}
               {isPending && <SpinnerIcon className='animate-spin w-6 h-6 text-indigo-600' />}
             </button>
             {!!exception && <ErrorMessage message={exception} />}
