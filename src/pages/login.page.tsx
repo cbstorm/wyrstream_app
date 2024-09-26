@@ -71,7 +71,7 @@ export function RightSide() {
         createdAt: res?.createdAt,
         updatedAt: res?.updatedAt,
       });
-      navigate('/');
+      navigate('/console/my_streams');
     } catch (error) {
       setException(_.get(error, 'message', 'Error occurred'));
       console.log('handleSignIn: ', error);

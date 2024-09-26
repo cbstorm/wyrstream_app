@@ -1,22 +1,43 @@
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import UserIcon from '../icons/User.icon';
 import { UserState } from '../states/user.state';
+import Avatar from './Avatar.component';
 
 export default function HeaderUser(props: { isLoading: boolean }) {
+  const navigate = useNavigate();
   const [user] = useRecoilState(UserState);
   if (props.isLoading) {
     return <HeaderUserSekeleton />;
   }
+  if (user._id && user.name) {
+    return (
+      <div
+        onClick={() => navigate('/console')}
+        className='fade-in flex gap-2 items-center px-4 py-1 text-gray-600 transition-colors duration-300 transform rounded-md cursor-pointer hover:bg-slate-100'
+      >
+        <Avatar src={user.avatarUrl} className='w-12 h-12 rounded-full overflow-hidden' />
+        <div className='flex flex-col w-40 truncate'>
+          <span className='font-bold text-gray-800 truncate'>{user.name}</span>
+          <span className='font-semibold text-xs text-gray-600 truncate'>{user.email}</span>
+        </div>
+      </div>
+    );
+  }
+  return <UnLoggedInUserHeader onClick={() => navigate('/login')} />;
+}
 
+function UnLoggedInUserHeader(props: { onClick: () => void }) {
   return (
-    <div className='fade-in flex gap-2 items-center px-4 py-1 text-gray-600 transition-colors duration-300 transform rounded-md cursor-pointer hover:bg-slate-100'>
-      <img
-        className='object-cover rounded-full h-9 w-9 flex-shrink-0'
-        src='https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
-        alt='avatar'
-      />
-      <div className='flex flex-col w-40 truncate'>
-        <span className='font-bold text-gray-800 truncate'>{user.name}</span>
-        <span className='font-semibold text-xs text-gray-600 truncate'>{user.email}</span>
+    <div
+      onClick={() => props.onClick()}
+      className='fade-in border border-indigo-200 flex gap-6 justify-center items-center px-8 py-1 transition-colors duration-300 transform rounded-md cursor-pointer bg-slate-50 hover:bg-slate-100'
+    >
+      <div className='border-indigo-800 border rounded-full p-1'>
+        <UserIcon className='text-indigo-800 w-6 h-6' />
+      </div>
+      <div className='truncate'>
+        <span className='font-bold text-indigo-800 truncate'>Login</span>
       </div>
     </div>
   );

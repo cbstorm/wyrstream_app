@@ -3,21 +3,21 @@ import { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Header from '../components/Header.component';
-import { MainPageSidebar } from '../components/Sidebar.component';
+import { ConsoleSidebar } from '../components/Sidebar.component';
 import authService from '../services/auth.service';
 import { UserState } from '../states/user.state';
-import StreamsPage from './streams.page';
-import VideosPage from './videos.page';
+import MyStreamsPage from './my_streams.page';
+import MyVideosPage from './my_videos.page';
 
-export default function MainPage() {
+export default function ConsolePage() {
   return (
     <div>
-      <MainPageComponent />
+      <ConsoleComponent />
     </div>
   );
 }
 
-function MainPageComponent() {
+function ConsoleComponent() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useRecoilState(UserState);
@@ -35,6 +35,7 @@ function MainPageComponent() {
       });
     } catch (error) {
       console.log('getMe: ', error);
+      navigate('/login');
     }
     setIsLoading(false);
   };
@@ -43,14 +44,14 @@ function MainPageComponent() {
   }, []);
   return (
     <div className='flex'>
-      <MainPageSidebar className='w-1/6 h-screen fixed z-20 border-r' isLoading={isLoading} />
+      <ConsoleSidebar className='w-1/6 h-screen fixed z-20 border-r' isLoading={isLoading} />
       <div className='relative w-full h-screen flex'>
         <Header isLoading={isLoading} />
         <div className='w-1/6 z-0 opacity-0'></div>
         <div className='pt-24 px-8 w-5/6'>
           <Routes>
-            <Route path='/streams' element={<StreamsPage />} />
-            <Route path='/videos' element={<VideosPage />} />
+            <Route path='/my_streams' element={<MyStreamsPage />} />
+            <Route path='/my_videos' element={<MyVideosPage />} />
           </Routes>
         </div>
       </div>

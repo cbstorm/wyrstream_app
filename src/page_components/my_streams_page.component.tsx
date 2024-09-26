@@ -345,7 +345,7 @@ export function MyStreamList(props: {
         })}
       {!props.isLoading && !props.streams.length && (
         <div className='flex justify-center col-span-full'>
-          <span className='text-gray-600 font-medium'>You do not have any stream</span>
+          <span className='text-gray-600 font-medium'>You do not have any streams</span>
         </div>
       )}
     </div>
@@ -359,13 +359,15 @@ export function MyStreamItem(props: { stream: IStream; onClick: () => void }) {
       className='fade-in shadow-lg overflow-hidden rounded-lg flex flex-col gap-2 bg-slate-50 cursor-pointer hover:shadow-xl transition-all duration-100'
     >
       <ThumbnailComponent thumbnail_url={props.stream.thumbnail_url} />
-      <div className='px-2 flex justify-between flex-col h-full'>
-        <div className='h-full'>
+      <div className='px-2 flex justify-between flex-col'>
+        <div className='h-auto'>
           <div className='flex justify-end'>
             <span className='font-semibold text-xs text-indigo-400'>#{props.stream.stream_id}</span>
           </div>
           <h2 className='font-semibold text-gray-800'>{props.stream.title}</h2>
-          <span className='text-sm text-gray-600'>{props.stream.description}</span>
+          <div className='h-auto truncate'>
+            <span className='text-sm text-gray-600'>{props.stream.description}</span>
+          </div>
         </div>
         <div className='flex justify-end gap-2 py-2'>
           {props.stream.enable_record && (

@@ -1,5 +1,6 @@
 import { BaseEntity, IFetchResponse } from './base.entity';
 import { IStreamLog } from './stream_log.entity';
+import { IUser } from './user.enity';
 
 export interface IStream extends BaseEntity {
   title: string;
@@ -17,6 +18,7 @@ export interface IStream extends BaseEntity {
   stream_url: string;
   shown_publish_key: string;
   stream_logs: IStreamLog[];
+  publisher: IUser;
 }
 
 export interface ICreateStreamInput {
