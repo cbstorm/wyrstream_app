@@ -335,7 +335,7 @@ export function MyStreamList(props: {
   onItemClick: (stream: IStream) => void;
 }) {
   return (
-    <div className='grid grid-cols-4 gap-2'>
+    <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4'>
       {props.streams.map((e, idx) => {
         return <MyStreamItem key={idx} stream={e} onClick={() => props.onItemClick(e)} />;
       })}

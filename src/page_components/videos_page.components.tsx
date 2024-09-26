@@ -1,19 +1,20 @@
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import { Popup, PopupCloseActionButton } from '../components/Popup.component';
+import { MediaOwner } from '../components/User.component';
 import { VideoPlayer, VideoTypes } from '../components/Video.component';
 import ThumbnailComponent from '../components/VideoThumbnail.component';
 import { IVod } from '../entities/vod.entity';
 
-export function MyVODList(props: { vods: IVod[]; isLoading: boolean; onItemClick: (vod: IVod) => void }) {
+export function VODList(props: { vods: IVod[]; isLoading: boolean; onItemClick: (vod: IVod) => void }) {
   return (
     <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4'>
       {props.vods.map((e, idx) => {
-        return <MyVOD vod={e} key={idx} onClick={() => props.onItemClick(e)} />;
+        return <VOD vod={e} key={idx} onClick={() => props.onItemClick(e)} />;
       })}
       {props.isLoading &&
         _.times(4, (i) => {
-          return <MyMyVODSkeleton key={i} />;
+          return <VODSkeleton key={i} />;
         })}
       {!props.isLoading && !props.vods.length && (
         <div className='flex justify-center col-span-full'>
@@ -24,7 +25,7 @@ export function MyVODList(props: { vods: IVod[]; isLoading: boolean; onItemClick
   );
 }
 
-export function MyVOD(props: { vod: IVod; onClick: () => void }) {
+export function VOD(props: { vod: IVod; onClick: () => void }) {
   return (
     <div
       onClick={() => props.onClick()}
@@ -38,6 +39,7 @@ export function MyVOD(props: { vod: IVod; onClick: () => void }) {
             <span className='text-sm text-gray-600'>{props.vod.description}</span>
           </div>
         </div>
+        <MediaOwner user={props.vod.owner} />
         <div className='flex justify-end'>
           <span className='text-xs py-2 text-gray-600 italic'>{moment(props.vod.createdAt).format('DD/MM/YYYY')}</span>
         </div>
@@ -46,7 +48,7 @@ export function MyVOD(props: { vod: IVod; onClick: () => void }) {
   );
 }
 
-export function MyVODViewPopup(props: { vod: IVod; onClose: () => void }) {
+export function VODViewPopup(props: { vod: IVod; onClose: () => void }) {
   return (
     <Popup
       title={props.vod.title}
@@ -72,6 +74,6 @@ export function MyVODViewPopup(props: { vod: IVod; onClose: () => void }) {
   );
 }
 
-export function MyMyVODSkeleton() {
+export function VODSkeleton() {
   return <div className='h-60 rounded-lg bg-slate-300 animate-pulse'></div>;
 }

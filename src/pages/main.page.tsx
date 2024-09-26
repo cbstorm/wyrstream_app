@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Header from '../components/Header.component';
 import { MainPageSidebar } from '../components/Sidebar.component';
@@ -18,7 +18,6 @@ export default function MainPage() {
 }
 
 function MainPageComponent() {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useRecoilState(UserState);
   const getMe = async () => {

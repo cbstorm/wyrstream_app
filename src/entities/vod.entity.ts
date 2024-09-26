@@ -1,4 +1,5 @@
 import { BaseEntity, IFetchResponse } from './base.entity';
+import { IUser } from './user.enity';
 
 export interface IVod extends BaseEntity {
   owner_id: string;
@@ -6,6 +7,7 @@ export interface IVod extends BaseEntity {
   description: string;
   hls_url: string;
   thumbnail_url: string;
+  owner: IUser;
 }
 
 export interface IUpdateVodInput {}

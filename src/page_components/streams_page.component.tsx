@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import Avatar from '../components/Avatar.component';
 import { Popup, PopupCloseActionButton } from '../components/Popup.component';
+import { MediaOwner } from '../components/User.component';
 import { VideoPlayer, VideoTypes } from '../components/Video.component';
 import ThumbnailComponent from '../components/VideoThumbnail.component';
 import { IStream } from '../entities/stream.entity';
 
 export function StreamList(props: { isLoading: boolean; streams: IStream[]; onItemClick: (stream: IStream) => void }) {
   return (
-    <div className='grid grid-cols-4 gap-2'>
+    <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4'>
       {props.streams.map((e, idx) => {
         return <StreamItem key={idx} stream={e} onClick={() => props.onItemClick(e)} />;
       })}
@@ -17,7 +17,9 @@ export function StreamList(props: { isLoading: boolean; streams: IStream[]; onIt
         })}
       {!props.isLoading && !props.streams.length && (
         <div className='flex justify-center col-span-full'>
-          <span className='text-gray-600 font-medium'>No streams available at the moment. Check back soon for live action or explore other content!</span>
+          <span className='text-gray-600 font-medium'>
+            No streams available at the moment. Check back soon for live action or explore other content!
+          </span>
         </div>
       )}
     </div>
@@ -41,10 +43,7 @@ export function StreamItem(props: { stream: IStream; onClick: () => void }) {
             <span className='text-sm text-gray-600'>{props.stream.description}</span>
           </div>
         </div>
-        <div className='py-2 flex items-center gap-1'>
-          <Avatar src={props.stream.publisher?.avatarUrl} className='w-8 h-8 rounded-full overflow-hidden' />
-          <span className='text-gray-600 text-sm font-semibold'>{props.stream.publisher?.name}</span>
-        </div>
+        <MediaOwner user={props.stream.publisher} />
       </div>
     </div>
   );
