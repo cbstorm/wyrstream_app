@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Header from '../components/Header.component';
 import { MainPageSidebar } from '../components/Sidebar.component';
@@ -50,6 +50,7 @@ function MainPageComponent() {
           <Routes>
             <Route path='/streams' element={<StreamsPage />} />
             <Route path='/videos' element={<VideosPage />} />
+            <Route path='*' element={<Navigate to='/streams' replace />} />
           </Routes>
         </div>
       </div>

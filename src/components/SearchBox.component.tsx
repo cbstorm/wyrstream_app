@@ -13,6 +13,7 @@ export default function SearchBox(props: { isLoading: boolean }) {
         type='text'
         className='w-full py-2 pl-10 pr-4 text-gray-600 bg-slate-100 focus:border-[1px] focus:border-gray-300 focus:bg-white rounded-lg transition-all duration-100'
         placeholder='Search'
+        disabled={true}
       />
     </div>
   );

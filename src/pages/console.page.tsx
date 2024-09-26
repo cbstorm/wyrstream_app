@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Header from '../components/Header.component';
 import { ConsoleSidebar } from '../components/Sidebar.component';
@@ -52,6 +52,7 @@ function ConsoleComponent() {
           <Routes>
             <Route path='/my_streams' element={<MyStreamsPage />} />
             <Route path='/my_videos' element={<MyVideosPage />} />
+            <Route path='*' element={<Navigate to='/console/my_streams' replace />} />
           </Routes>
         </div>
       </div>

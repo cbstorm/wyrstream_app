@@ -1,30 +1,53 @@
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { IUser } from '../entities/user.enity';
+import LogoutIcon from '../icons/Logout.icon';
 import UserIcon from '../icons/User.icon';
-import { UserState } from '../states/user.state';
+import { clearTokens } from '../services/base.service';
+import { UserState, userStateDefault } from '../states/user.state';
 import Avatar from './Avatar.component';
 
 export default function HeaderUser(props: { isLoading: boolean }) {
   const navigate = useNavigate();
-  const [user] = useRecoilState(UserState);
+  const [user, setUser] = useRecoilState(UserState);
+  const handleLogout = () => {
+    setUser(userStateDefault);
+    clearTokens();
+    navigate('/login');
+  };
   if (props.isLoading) {
     return <HeaderUserSekeleton />;
   }
   if (user._id && user.name) {
     return (
-      <div
-        onClick={() => navigate('/console')}
-        className='fade-in flex gap-2 items-center px-4 py-1 text-gray-600 transition-colors duration-300 transform rounded-md cursor-pointer hover:bg-slate-100'
-      >
-        <Avatar src={user.avatarUrl} className='w-12 h-12 rounded-full overflow-hidden' />
-        <div className='flex flex-col w-40 truncate'>
-          <span className='font-bold text-gray-800 truncate'>{user.name}</span>
-          <span className='font-semibold text-xs text-gray-600 truncate'>{user.email}</span>
-        </div>
+      <div className='flex gap-2'>
+        <LoggedInUserHeader user={user} onClick={() => navigate('/console')} />
+        <button
+          onClick={() => handleLogout()}
+          className='fade-in flex gap-2 items-center px-4 py-1 text-gray-600 transition-colors duration-100 transform rounded-md cursor-pointer hover:bg-slate-100 border border-rose-800'
+        >
+          <LogoutIcon className='w-6 h-6 text-rose-800' />
+          <span className='text-xs text-rose-800 font-semibold'>Logout</span>
+        </button>
       </div>
     );
   }
   return <UnLoggedInUserHeader onClick={() => navigate('/login')} />;
+}
+
+function LoggedInUserHeader(props: { user: IUser; onClick: () => void }) {
+  return (
+    <div
+      onClick={() => props.onClick()}
+      className='fade-in flex gap-2 items-center px-4 py-1 text-gray-600 transition-colors duration-100 transform rounded-md cursor-pointer hover:bg-slate-100'
+    >
+      <Avatar src={props.user.avatarUrl} className='w-12 h-12 rounded-full overflow-hidden' />
+      <div className='flex flex-col w-40 truncate'>
+        <span className='font-bold text-gray-800 truncate'>{props.user.name}</span>
+        <span className='font-semibold text-xs text-gray-600 truncate'>{props.user.email}</span>
+      </div>
+    </div>
+  );
 }
 
 function UnLoggedInUserHeader(props: { onClick: () => void }) {

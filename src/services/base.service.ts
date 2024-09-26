@@ -46,6 +46,10 @@ export function setRefreshToken(token: string) {
   return localStorage.setItem('refresh_token', token);
 }
 
+export function clearTokens() {
+  return localStorage.clear();
+}
+
 export enum APIOps {
   FETCH = 'FETCH',
   GET = 'GET',
