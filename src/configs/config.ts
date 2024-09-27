@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost:6666';
+export const BASE_URL = 'https://control-svc.wyrstream.nith-solutions.com';

@@ -3,7 +3,7 @@
   "name": "WYR Stream",
   "icons": [
     {
-      "src": "wyr_stream_logo.png.png",
+      "src": "wyr_stream_logo.png",
       "type": "image/png",
       "sizes": "192x192"
     }
