@@ -2,3 +2,4 @@ __generator
 .github
 plopfile.mjs
 README.md
+node_modules
