@@ -18,7 +18,7 @@ export function StreamList(props: { isLoading: boolean; streams: IStream[]; onIt
       {!props.isLoading && !props.streams.length && (
         <div className='flex justify-center col-span-full'>
           <span className='text-gray-600 font-medium'>
-            No streams available at the moment. Check back soon for live action or explore other content!
+            ▶️ No streams available at the moment. Check back soon for live action or explore other content!
           </span>
         </div>
       )}

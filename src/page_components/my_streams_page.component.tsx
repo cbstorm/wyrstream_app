@@ -345,7 +345,9 @@ export function MyStreamList(props: {
         })}
       {!props.isLoading && !props.streams.length && (
         <div className='flex justify-center col-span-full'>
-          <span className='text-gray-600 font-medium'>You do not have any streams</span>
+          <span className='text-gray-600 font-medium'>
+            🎥 No video streams here yet! Upload your first video streams to get started and share it with the world!
+          </span>
         </div>
       )}
     </div>

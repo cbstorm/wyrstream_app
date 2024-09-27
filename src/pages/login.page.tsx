@@ -128,6 +128,9 @@ export function RightSide() {
             </button>
             {!!exception && <ErrorMessage message={exception} />}
           </div>
+          <div className='flex justify-center'>
+            <span onClick={() => navigate("/")} className='underline text-sm font-semibold text-gray-500 cursor-pointer'>Continue without login</span>
+          </div>
         </div>
       </div>
     </div>

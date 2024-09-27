@@ -18,7 +18,9 @@ export function VODList(props: { vods: IVod[]; isLoading: boolean; onItemClick: 
         })}
       {!props.isLoading && !props.vods.length && (
         <div className='flex justify-center col-span-full'>
-          <span className='text-gray-600 font-medium'>You do not have any videos</span>
+          <span className='text-gray-600 font-medium'>
+            📺 No videos available at the moment. New content coming soon—stay tuned!
+          </span>
         </div>
       )}
     </div>

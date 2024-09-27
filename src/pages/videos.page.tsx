@@ -33,7 +33,7 @@ export default function VideosPage() {
   return (
     <div>
       <div className='flex flex-col gap-4'>
-        <h2 className='text-lg font-semibold text-gray-800'> videos</h2>
+        <h2 className='text-lg font-semibold text-gray-800'>Videos</h2>
         <VODList
           vods={vods}
           isLoading={isLoading}
